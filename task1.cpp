@@ -101,20 +101,21 @@ int main() {
         GaussianBlur(frame, frame, Size(3, 3), 0);
 
         vector<Rect> faces;
-        face_cascade.detectMultiScale(gray_frame, faces);
+        face_cascade.detectMultiScale(gray_frame, faces, 1.1, 2, 0 | CASCADE_SCALE_IMAGE, Size(30, 30));
 
         for (const Rect& face : faces) {
             rectangle(frame, face, Scalar(255, 0, 0), 2);
 
             Mat faceROI = gray_frame(face);
-            vector<Rect> eyes, smile;
 
+            vector<Rect> eyes;
             eyes_cascade.detectMultiScale(faceROI, eyes);
             for (const Rect& eye : eyes) {
                 rectangle(frame, face.tl() + eye.tl(), face.tl() + eye.br(), Scalar(0, 255, 0), 2);
             }
 
-            smile_cascade.detectMultiScale(faceROI, smile, 1.1, 30, 0, Size(30, 30));
+            vector<Rect> smile;
+            smile_cascade.detectMultiScale(faceROI, smile, 1.165, 35, 0 | CASCADE_SCALE_IMAGE, Size(30, 30));
             for (const Rect& s : smile) {
                 rectangle(frame, face.tl() + s.tl(), face.tl() + s.br(), Scalar(0, 0, 255), 2);
             }
